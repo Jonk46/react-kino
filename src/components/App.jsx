@@ -1,65 +1,82 @@
 import React from "react";
-import { moviesData } from '../moviesData';
-import MovieItem from './MovieItem'
+// import { moviesData } from "../moviesData";
+import MovieItem from "./MovieItem";
+import { API_URL, API_KEY_3 } from '../utils/api'
+
+// UI = fn(state, props)
+
+// App = new React.Component()
 
 class App extends React.Component {
   constructor() {
     super();
 
     this.state = {
-      movies: moviesData,
+      movies: [],
       moviesWillWatch: []
-    }
+    };
+    console.log("constructor");
   }
 
-  removeMovie = movie => {
-    const updateMovies = this.state.movies.filter(function (item) {
-      return item.id !== movie.id;
-    });
+  componentDidMount() {
+    console.log("didMount");
+    fetch(`${API_URL}/discover/movie?api_key=${API_KEY_3}&sort_by=popularity.desc `).then((response) => {
+      console.log("then")
+      return response.json()
+    }).then((data) => {
+      console.log("data", data);
+      this.setState({
+        movies: data.results
+      })
+    })
+    // console.log("after fetch");
+  }
+
+  deleteMovie = movie => {
+    console.log(movie.id);
+    const updateMovies = this.state.movies.filter(item => item.id !== movie.id);
     console.log(updateMovies);
+
+    // this.state.movies = updateMovies;
     this.setState({
       movies: updateMovies
     });
-  }
+  };
 
   addMovieToWillWatch = movie => {
-    console.log(movie);
-
-    // const updateMoviesWillWatch = [...this.state.moviesWillWatch];
-    // updateMoviesWillWatch.push(movie);
-
-    const updateMoviesWillWatch = [...this.state.moviesWillWatch, movie];
+    const updateMoviesWillWatch = [...this.state.moviesWillWatch];
+    updateMoviesWillWatch.push(movie);
 
     this.setState({
       moviesWillWatch: updateMoviesWillWatch
     });
   };
 
-  removeMovieFromWillWatch = movie => {
-    const updateMoviesWillWatch = this.state.moviesWillWatch.filter(function (item) {
-      return item.id !== movie.id;
-    });
-    // console.log(updateMovies);
+  deleteMovieFromWillWatch = movie => {
+    const updateMoviesWillWatch = this.state.moviesWillWatch.filter(
+      item => item.id !== movie.id
+    );
+
     this.setState({
       moviesWillWatch: updateMoviesWillWatch
     });
-  }
+  };
 
   render() {
-    console.log("render", this.state, this);
+    console.log("render");
     return (
       <div className="container">
-        <div className="row">
+        <div className="row mt-4">
           <div className="col-9">
             <div className="row">
               {this.state.movies.map(movie => {
                 return (
                   <div className="col-6 mb-4" key={movie.id}>
                     <MovieItem
-                      movie={movie}
-                      removeMovie={this.removeMovie}
+                      data={movie}
+                      deleteMovie={this.deleteMovie}
                       addMovieToWillWatch={this.addMovieToWillWatch}
-                      removeMovieFromWillWatc={this.removeMovieFromWillWatch}
+                      deleteMovieFromWillWatch={this.deleteMovieFromWillWatch}
                     />
                   </div>
                 );
@@ -67,7 +84,17 @@ class App extends React.Component {
             </div>
           </div>
           <div className="col-3">
-            <p>Will Watch: {this.state.moviesWillWatch.length}</p>
+            <h4>Will Watch: {this.state.moviesWillWatch.length} movies</h4>
+            <ul className="list-group">
+              {this.state.moviesWillWatch.map(movie => (
+                <li key={movie.id} className="list-group-item">
+                  <div className="d-flex justify-content-between">
+                    <p>{movie.title}</p>
+                    <p>{movie.vote_average}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </div>
