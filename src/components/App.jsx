@@ -21,17 +21,31 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    console.log("didMount");
+    console.log("App didMount");
+    this.getMovies();
+    // console.log("after fetch");
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    console.log("App didUpdate");
+    // console.log("prev", prevProps, prevState);
+    // console.log("this", this.props, this.state);
+    if (prevState.sort_by !== this.state.sort_by) {
+      console.log("App call api");
+      this.getMovies();
+    }
+  }
+
+  getMovies = () => {
     fetch(`${API_URL}/discover/movie?api_key=${API_KEY_3}&sort_by=${this.state.sort_by}`).then((response) => {
-      console.log("then")
+      // console.log("then")
       return response.json()
     }).then((data) => {
-      console.log("data", data);
+      // console.log("data", data);
       this.setState({
         movies: data.results
       })
     })
-    // console.log("after fetch");
   }
 
   deleteMovie = movie => {
@@ -71,16 +85,16 @@ class App extends React.Component {
   }
 
   render() {
-    console.log("render");
+    console.log("App render", this.state.sort_by);
     return (
       <div className="container">
         <div className="row mt-4">
           <div className="col-9">
             <div className="row mb-4">
               <div className="col-12">
-                <MovieTabs 
-                sort_by={this.state.sort_by} 
-                updateSortBy={this.updateSortBy}
+                <MovieTabs
+                  sort_by={this.state.sort_by}
+                  updateSortBy={this.updateSortBy}
                 />
               </div>
             </div>
