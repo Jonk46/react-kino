@@ -2,8 +2,26 @@ body {
   background: #f9f9f9;
 }
 
+.fix-list {
+  position: fixed;
+  top: 60px;
+  right: 0;
+}
+
+.tab {
+  position: fixed;
+  z-index: 99;
+  top: 0;
+  background: black;
+}
+
+.nav-item  {
+  color: black;
+}
+
 .nav-link {
   cursor: pointer;
+  color: white;
 
   &:hover {
     color: #007bff;

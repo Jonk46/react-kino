@@ -3,6 +3,7 @@ import React from "react";
 import MovieItem from "./MovieItem";
 import { API_URL, API_KEY_3 } from '../utils/api'
 import MovieTabs from './MovieTabs'
+import Pagination from './Pagination'
 
 // UI = fn(state, props)
 
@@ -15,7 +16,9 @@ class App extends React.Component {
     this.state = {
       movies: [],
       moviesWillWatch: [],
-      sort_by: "revenue.desc"
+      sort_by: "revenue.desc",
+      total_pages: "",
+      page: 1
     };
     console.log("constructor");
   }
@@ -30,20 +33,23 @@ class App extends React.Component {
     console.log("App didUpdate");
     // console.log("prev", prevProps, prevState);
     // console.log("this", this.props, this.state);
-    if (prevState.sort_by !== this.state.sort_by) {
+
+    if (prevState.sort_by !== this.state.sort_by || (prevState.page !== this.state.page)) {
       console.log("App call api");
       this.getMovies();
+      window.scrollTo(0, 0);
     }
   }
 
   getMovies = () => {
-    fetch(`${API_URL}/discover/movie?api_key=${API_KEY_3}&sort_by=${this.state.sort_by}`).then((response) => {
+    fetch(`${API_URL}/discover/movie?api_key=${API_KEY_3}&sort_by=${this.state.sort_by}&page=${this.state.page}`).then((response) => {
       // console.log("then")
       return response.json()
     }).then((data) => {
       // console.log("data", data);
       this.setState({
-        movies: data.results
+        movies: data.results,
+        total_pages: data.total_pages
       })
     })
   }
@@ -82,7 +88,21 @@ class App extends React.Component {
     this.setState({
       sort_by: value
     })
-  }
+  };
+
+  changePageToPrevious = () => {
+    if (this.state.page !== 1) {
+      const previousPage = this.state.page - 1;
+      this.setState({ page: previousPage });
+    }
+  };
+
+  changePageToNext = () => {
+    if (this.state.page !== 500) {
+      const nextPage = this.state.page + 1;
+      this.setState({ page: nextPage });
+    }
+  };
 
   render() {
     console.log("App render", this.state.sort_by);
@@ -91,7 +111,7 @@ class App extends React.Component {
         <div className="row mt-4">
           <div className="col-9">
             <div className="row mb-4">
-              <div className="col-12">
+              <div className="col-12 tab">
                 <MovieTabs
                   sort_by={this.state.sort_by}
                   updateSortBy={this.updateSortBy}
@@ -112,8 +132,13 @@ class App extends React.Component {
                 );
               })}
             </div>
+            <div className="row mb-4 mt-4">
+              <div className="col-12">
+                <Pagination totalPages={this.state.total_pages} changePageToPrevious={this.changePageToPrevious} page={this.state.page} changePageToNext={this.changePageToNext} />
+              </div>
+            </div>
           </div>
-          <div className="col-3">
+          <div className="col-3 fix-list">
             <h4>Will Watch: {this.state.moviesWillWatch.length} movies</h4>
             <ul className="list-group">
               {this.state.moviesWillWatch.map(movie => (
