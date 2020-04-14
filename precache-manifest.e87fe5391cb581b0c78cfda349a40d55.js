@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "f904200cc81123991cc631459751e54e",
+    "revision": "3d8bb7e327c5ce3d5f80c6711c76d0e9",
     "url": "/react-kino/index.html"
   },
   {
@@ -8,8 +8,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/react-kino/static/css/2.de424728.chunk.css"
   },
   {
-    "revision": "5aca03e0101bb827132f",
-    "url": "/react-kino/static/css/main.5d937b94.chunk.css"
+    "revision": "b23f769df67031bc05cb",
+    "url": "/react-kino/static/css/main.54b3471e.chunk.css"
   },
   {
     "revision": "7b178eb1d8c007b4d346",
@@ -20,8 +20,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/react-kino/static/js/2.d9cdd051.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "5aca03e0101bb827132f",
-    "url": "/react-kino/static/js/main.b08ee081.chunk.js"
+    "revision": "b23f769df67031bc05cb",
+    "url": "/react-kino/static/js/main.5a9ac4b0.chunk.js"
   },
   {
     "revision": "f757be89bf072bfe8968",
